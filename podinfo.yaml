@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gaydeployment
@@ -6,6 +6,9 @@ metadata:
     app: my-app
   namespace: 3gays
 spec:
+  selector:
+    matchLabels:
+      app: my-app
   template:
     metadata:
       labels:

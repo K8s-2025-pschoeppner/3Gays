@@ -17,7 +17,7 @@ spec:
       containers:
         - name: gay-image
           image: ghcr.io/stefanprodan/podinfo
-          
+
 ---
 apiVersion: v1
 kind: Service
@@ -31,4 +31,4 @@ spec:
   ports:
     - protocol: TCP
       port: 80      # External Port
-      targetPort: 8080 # Pod Port
+      targetPort: 9898 # Pod Port

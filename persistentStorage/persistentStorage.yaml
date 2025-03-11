@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaydeployment
+  labels:
+    app: my-app
+  namespace: 3gays
+spec:
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: gay-image
+          image: ghcr.io/stefanprodan/podinfo
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-loadbalancer-service
+  namespace: 3gays
+spec:
+  type: LoadBalancer
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80      # External Port
+      targetPort: 80 # Pod Port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-clusterip-service
+  namespace: 3gays
+spec:
+  type: ClusterIP
+  selector:
+    app: my-app
+  clusterIP: 10.109.0.2
+  ports:
+    - name: podinfo
+      protocol: TCP
+      port: 80
+      targetPort: 9898
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: 3gays
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: gay-nginx
+  rules:
+    - host: my-app.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: my-clusterip-service
+                port:
+                  number: 80

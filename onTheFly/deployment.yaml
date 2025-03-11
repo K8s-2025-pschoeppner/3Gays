@@ -65,7 +65,6 @@ spec:
   type: ClusterIP
   selector:
     app: my-app
-    version: blue
   clusterIP: 10.109.0.2
   ports:
     - name: podinfo
@@ -74,6 +73,30 @@ spec:
       targetPort: 9898
 ---
 #ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-canary-ingress
+  namespace: 3gays
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "85"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: 3gays.k8s.schoeppi5.de
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: my-clusterip-service
+                port:
+                  number: 80
+---
+#ingress 2
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

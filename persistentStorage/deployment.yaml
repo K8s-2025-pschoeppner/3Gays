@@ -20,10 +20,12 @@ spec:
         - name: gay-image
           image: ghcr.io/stefanprodan/podinfo
           volumeMounts:
-            - name: storage
+            - name: data
               mountPath: /data
+          securityContext: 
+              runAsUser: 0
       volumes:
-        - name: storage
+        - name: data
           persistentVolumeClaim:
             claimName: gay-pvc
 ---

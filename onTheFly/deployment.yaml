@@ -1,28 +1,59 @@
-# app
+# app 1
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gaydeployment
   labels:
     app: my-app
+    version: blue
   namespace: 3gays
 spec:
   replicas: 4
   selector:
     matchLabels:
       app: my-app
+      version: blue
   template:
     metadata:
       labels:
         app: my-app
+        version: blue 
     spec:
       containers:
         - name: gay-image
           image: ghcr.io/stefanprodan/podinfo
           env: 
             - name: PODINFO_UI_MESSAGE
-              value: "vivian ist gay für may"
+              value: "May"
 
+---
+# app 2
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaydeployment2
+  labels:
+    app: my-app
+    version: red
+  namespace: 3gays
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: my-app
+      version: red
+  template:
+    metadata:
+      labels:
+        app: my-app
+        version: red
+    spec:
+      containers:
+        - name: gay-image
+          image: ghcr.io/stefanprodan/podinfo
+          env: 
+            - name: PODINFO_UI_MESSAGE
+              value: "Vivian"
 ---
 # clusterip
 apiVersion: v1
@@ -34,6 +65,7 @@ spec:
   type: ClusterIP
   selector:
     app: my-app
+    version: blue
   clusterIP: 10.109.0.2
   ports:
     - name: podinfo

@@ -19,6 +19,26 @@ spec:
       containers:
         - name: gay-image
           image: ghcr.io/stefanprodan/podinfo
+          volumeMounts:
+            - name: storage
+              mountPath: /data
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: gay-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gay-pvc
+  namespace: 3gays
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
 
 ---
 # clusterip 

@@ -17,7 +17,34 @@ spec:
       containers:
         - name: gay-image
           image: ghcr.io/stefanprodan/podinfo
-
+          volumeMounts:
+            - name: storage
+              mountPath: /data
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: gay-pvc
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: do-block-storage
+provisioner: dobs.csi.digitalocean.com
+parameters:
+  fsType: ext4
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gay-pvc
+  namespace: 3gays
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: do-block-storage
 ---
 apiVersion: v1
 kind: Service
